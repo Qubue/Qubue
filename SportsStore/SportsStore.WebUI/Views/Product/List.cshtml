@@ -1,43 +1,19 @@
-﻿@model IEnumerable<SportsStore.Domain.Entity.Product>
+﻿@model SportsStore.WebUI.Models.ProductsListViewModel
 
 @{
     ViewBag.Title = "Produkty";
 }
 
-<h2>List</h2>
+<h2>Lista produktów</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Category)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category)
-        </td>
-    </tr>
+<table class="table table-bordered text-center">
+@foreach (var item in Model.Products)
+{
+    @Html.Partial("ProductList", item)
 }
-
 </table>
+
+<div class="btn-group pull-right">
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action("List", new { page = x }))
+</div>
+

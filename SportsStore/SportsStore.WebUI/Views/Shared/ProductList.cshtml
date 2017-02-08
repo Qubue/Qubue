@@ -1,0 +1,15 @@
+﻿@model SportsStore.Domain.Entity.Product
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => Model.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => Model.Description)
+    </td>
+    <td>
+        @String.Format("{0:c}", Model.Price)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => Model.Category)
+    </td>
+</tr>

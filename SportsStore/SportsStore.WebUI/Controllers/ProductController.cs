@@ -1,5 +1,6 @@
 ﻿using PagedList;
 using SportsStore.Domain.Abstract;
+using SportsStore.WebUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,20 @@ namespace SportsStore.WebUI.Controllers
         //paging 4 items per site
         public ViewResult List(int page = 1)
         {
-            return View(repository.Products
-                .OrderBy(p => p.ProductID)
+            ProductsListViewModel model = new ProductsListViewModel
+            {
+                Products = repository.Products
+                .OrderBy(a => a.ProductID)
                 .Skip((page - 1) * pageSize)
-                .Take(pageSize));
+                .Take(pageSize),
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = page,
+                    ItemsPerPage = pageSize,
+                    TotalItems = repository.Products.Count()
+                }
+            };
+            return View(model);
         }    
     }
 }
