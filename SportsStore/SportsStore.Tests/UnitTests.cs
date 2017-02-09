@@ -86,7 +86,7 @@ namespace SportsStore.Tests
         }
 
         [TestMethod]
-        public void Can_Filter_Product()
+        public void Product_Filtering_By_Categories()
         {
             Mock<IProductRepository> mock = new Mock<IProductRepository>();
             mock.Setup(m => m.Products).Returns(new Product[]
@@ -106,6 +106,46 @@ namespace SportsStore.Tests
             Assert.AreEqual(result.Length, 2);
             Assert.IsTrue(result[0].Name == "P2" && result[0].Category == "Cat2");
             Assert.IsTrue(result[1].Name == "P4" && result[1].Category == "Cat2");
+        }
+
+        [TestMethod]
+        public void Create_Categories_Partial_View()
+        {
+            Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            mock.Setup(m => m.Products).Returns(new Product[]
+            {
+                new Product {ProductID = 1, Name = "P1", Category = "Jabłka"},
+                new Product {ProductID = 2, Name = "P2", Category = "Jabłka"},
+                new Product {ProductID = 3, Name = "P3", Category = "Śliwki"},
+                new Product {ProductID = 4, Name = "P4", Category = "Pomarańcze"},
+            }.AsQueryable());
+
+            NavController target = new NavController(mock.Object);
+
+            string[] result = ((IQueryable<string>)target.Menu().Model).ToArray();
+
+            Assert.IsTrue(result.Length == 3);
+            Assert.AreEqual(result[0], "Jabłka");
+            Assert.AreEqual(result[1], "Śliwki");
+            Assert.AreEqual(result[2], "Pomarańcze");
+        }
+
+        [TestMethod]
+        public void Indicates_Selected_Category()
+        {
+            Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            mock.Setup(m => m.Products).Returns(new Product[] {
+                new Product {ProductID = 1, Name = "P1", Category = "Jabłka"},
+                new Product {ProductID = 4, Name = "P2", Category = "Pomarańcze"},
+            }.AsQueryable());
+
+            NavController target = new NavController(mock.Object);
+
+            string categoryToSelect = "Jabłka";
+
+            string result = target.Menu(categoryToSelect).ViewBag.SelectedCategory;
+
+            Assert.AreEqual(categoryToSelect, result);
         }
     }
 }
